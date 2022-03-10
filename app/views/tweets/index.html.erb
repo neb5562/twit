@@ -1,14 +1,12 @@
-<p style="color: green"><%= notice %></p>
-
-<h1>Tweets</h1>
-
-<div id="tweets">
-  <% @tweets.each do |tweet| %>
-    <%= render tweet %>
-    <p>
-      <%= link_to "Show this tweet", tweet %>
-    </p>
-  <% end %>
-</div>
-
-<%= link_to "New tweet", new_tweet_path %>
+<div class="row">
+    <div class="col-2 order-last">
+      First in DOM, ordered last
+    </div>
+    <div class="col-8">
+      <%= render "form" %>
+      <%= render "feed" %>
+    </div>
+    <div class="col-2 order-first">
+      Third in DOM, ordered first
+    </div>
+  </div>

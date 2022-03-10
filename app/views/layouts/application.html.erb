@@ -7,20 +7,47 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
     <%= javascript_importmap_tags %>
+    <%= javascript_include_tag "rails" %>
   </head>
 
   <body>
   <% if flash[:notice]%>
-  <div class="alert alert-warning" role="alert">
+  <div class="alert alert-warning" role="alert" style="margin-bottom:0!important;">
        <p class="notice"><%= notice %></p>
   </div>
   <% end %>
   <% if flash[:alert]%>
-  <div class="alert alert-danger" role="alert">
+  <div class="alert alert-danger" role="alert" style="margin-bottom:0!important;">
        <p class="alert"><%= alert %></p>
   </div>
   <% end %>
-    <%= yield %>
+
+  <nav class="navbar navbar-dark bg-primary navbar-expand-lg mb-5">
+  <div class="container-fluid">
+  <%= link_to root_path, class: "navbar-brand" do %>
+  <h1 class="title">Tweet</h1>
+  <% end %>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+      </ul>
+      <span class="navbar-text">
+        <%= link_to new_tweet_path, class: "btn btn-light text-black" do %>
+          New Tweet
+        <% end %>
+        <button type="button" class="btn btn-link text-white">Sign Up</button>
+      </span>
+    </div>
+  </div>
+</nav>
+    <div class="container">
+        <%= yield %>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
   </body>
 </html>

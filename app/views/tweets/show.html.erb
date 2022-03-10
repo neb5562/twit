@@ -1,10 +1,15 @@
-<p style="color: green"><%= notice %></p>
 
-<%= render @tweet %>
-
-<div>
-  <%= link_to "Edit this tweet", edit_tweet_path(@tweet) %> |
-  <%= link_to "Back to tweets", tweets_path %>
-
-  <%= button_to "Destroy this tweet", @tweet, method: :delete %>
-</div>
+<div class="row">
+    <div class="col-2 order-first">
+      Similar tweets
+    </div>
+    <div class="col-10">
+        <%= render @tweet %>
+      <%= link_to edit_tweet_path(@tweet), class: "p-2" do %>
+       <i class="fa-solid fa-sm fa-pen-to-square"></i>
+      <% end %> 
+      <%= link_to @tweet, method: :delete, data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'}, class: "p-2" do %>
+        <i class="fa-solid fa-sm fa-trash-can"></i>
+      <% end %> 
+    </div>
+  </div>

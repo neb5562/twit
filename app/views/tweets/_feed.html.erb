@@ -1,0 +1,38 @@
+<% @tweets.each do | tweet | %>
+    <div class="card mb-3 border-0">
+        <div class="row g-0">
+            <div class="col-md-2">
+                <img style="max-width:105px;"
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh2luCjtXnp2tzGjmlQyveWqphByb_Vi08ngH6JTdjcGY0ePuCb6MqE1ac5zV-0dPvb5g&usqp=CAU"
+                    class="rounded img-fluid rounded-start" alt="...">
+            </div>
+            <div class="col-md-10">
+                <div class="card-body">
+                    <%= link_to "@neb" , "#" , class: "h5 card-title text-decoration-none"%>
+                        <p class="card-text">
+                            <%= tweet.tweet %>
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                <%= link_to tweet_path(tweet), class: "p-2 text-decoration-none" do %>
+                                    <%= time_ago_in_words(tweet.updated_at).to_s + " ago" %>
+                                        <% end %>
+                            </small>
+                        <div class="btn-group" role="group" aria-label="Basic outlined example">
+                            <%= link_to tweet_path(tweet), class: "p-2" do %>
+                                <i class="fa fa-sm fa-solid fa-link"></i>
+                                <% end %>
+                                    <%= link_to edit_tweet_path(tweet), class: "p-2" do %>
+                                        <i class="fa-solid fa-sm fa-pen-to-square"></i>
+                                        <% end %>
+                                            <%= link_to tweet, method: :delete, data: {turbo_method: :delete,
+                                                turbo_confirm: 'Are you sure?' }, class: "p-2" do %>
+                                                <i class="fa-solid fa-sm fa-trash-can"></i>
+                                                <% end %>
+                        </div>
+                        </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% end %>
