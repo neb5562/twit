@@ -14,7 +14,7 @@
 
   <body>
   <% if flash[:notice]%>
-  <div class="alert alert-warning" role="alert" style="margin-bottom:0!important;">
+  <div class="alert alert-success" role="alert" style="margin-bottom:0!important;">
        <p class="notice"><%= notice %></p>
   </div>
   <% end %>
@@ -40,7 +40,7 @@
         <%= link_to new_tweet_path, class: "btn btn-light text-black" do %>
           New Tweet
         <% end %>
-        <button type="button" class="btn btn-link text-white">Sign Up</button>
+        <%= link_to "Sign Up", root_path, class: "btn btn-link text-white text-decoration-none" %>
       </span>
     </div>
   </div>

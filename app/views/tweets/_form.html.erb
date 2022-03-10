@@ -3,7 +3,7 @@
  <%= simple_form_for(@tweet) do |f|%>
   <%= f.error_notification %>
   <div class="col-auto mb-3">
-    <%= f.input :tweet, label: "Tweet about it", input_html: { class: "textarea form-control", rows: 4}, wrapper: false, label_html: { class: "label"}, placeholder: "Tweet text"%>
+    <%= f.input :tweet, input_html: { class: "textarea form-control", rows: 4}, wrapper: false, label_html: { class: "label"}, placeholder: "Tweet text"%>
   </div>
   <div class="col-auto mb-3 float-end">
     <%= f.button :submit, class: "btn btn-primary btn-md" %>
