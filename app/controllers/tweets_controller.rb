@@ -1,5 +1,6 @@
 class TweetsController < ApplicationController
   before_action :set_tweet, only: %i[ show edit update destroy ]
+  before_action :authenticate_user!, except: [:index, :show]
 
   # GET /tweets or /tweets.json
   def index
@@ -13,7 +14,7 @@ class TweetsController < ApplicationController
 
   # GET /tweets/new
   def new
-    @tweet = Tweet.new
+    @tweet = current_user.tweet.build
   end
 
   # GET /tweets/1/edit
@@ -22,7 +23,7 @@ class TweetsController < ApplicationController
 
   # POST /tweets or /tweets.json
   def create
-    @tweet = Tweet.new(tweet_params)
+    @tweet = current_user.tweet.build(tweet_params)
 
     respond_to do |format|
       if @tweet.save
@@ -50,14 +51,20 @@ class TweetsController < ApplicationController
 
   # DELETE /tweets/1 or /tweets/1.json
   def destroy
-    @tweet.destroy
-
-    respond_to do |format|
-      format.html { redirect_to tweets_url, notice: "Tweet was successfully destroyed." }
-      format.json { head :no_content }
+    if @tweet.user_id == current_user.id
+      @tweet.destroy
+      respond_to do |format|
+        format.html { redirect_to tweets_url, notice: "Tweet was successfully destroyed." }
+        format.json { head :no_content }
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to tweets_url, alert: "No permission" }
+        format.json { head :no_content }
+      end
     end
-  end
 
+  end
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_tweet

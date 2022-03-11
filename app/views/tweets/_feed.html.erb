@@ -8,31 +8,57 @@
             </div>
             <div class="col-md-10">
                 <div class="card-body">
-                    <%= link_to "@neb" , "#" , class: "h5 card-title text-decoration-none"%>
+ <div class="row">
+    <div class="col-10">    
+    <h5><%= tweet.user.name%></h5>                
+</div>
+    <div class="col-2">  
+        <%= link_to("#", class: "float-end", style: "color:#cdcdcd;" ) do %>
+        <i class="fa-solid fa-sm fa-ellipsis-vertical"></i>
+        <% end %>                
+</div>
+  </div>
+                 <%= link_to "@" + tweet.user.username , "#" , class: "h8 card-title text-decoration-none text-secondary"%>
+        
                         <p class="card-text">
-                            <%= tweet.tweet %>
+                            <%= tweet.tweet.gsub(/(#)\S+/, '<a href="hashtag/\0">\0</a>').gsub(/(@)\S+/, '<a href="profile/\0">\0</a>').html_safe %>
                         </p>
-                        <p class="card-text">
-                            <small class="text-muted">
-                                <%= link_to tweet_path(tweet), class: "p-2 text-decoration-none" do %>
+                                                    
+
+<div class="row">
+    <div class="col-2">
+
+                        <div class="btn-group" role="group" aria-label="Basic outlined example">
+                            <%= link_to tweet_path(tweet), class: "p-1" do %>
+                                <i class="fa fa-sm fa-solid fa-link"></i>
+                                <% end %>
+
+                                <% if user_signed_in? %>
+                                    <% if current_user.id == tweet.user_id %>
+                                
+                                            <%= link_to tweet, method: :delete, data: {turbo_method: :delete,
+                                                turbo_confirm: 'Are you sure?' }, class: "p-1" do %>
+                                                <i class="fa-solid fa-sm fa-trash-can"></i>
+                                                <% end %>
+                                    <% end %>
+                                <% end %>
+
+                        </div>
+    </div>
+    <div class="col-10">
+<small class="text-muted float-end">
+                                <%= link_to tweet_path(tweet), class: "p-1 text-decoration-none", style: "color:#858585;font-size: 11px;" do %>
                                     <%= time_ago_in_words(tweet.updated_at).to_s + " ago" %>
                                         <% end %>
                             </small>
-                        <div class="btn-group" role="group" aria-label="Basic outlined example">
-                            <%= link_to tweet_path(tweet), class: "p-2" do %>
-                                <i class="fa fa-sm fa-solid fa-link"></i>
-                                <% end %>
-                                    <%= link_to edit_tweet_path(tweet), class: "p-2" do %>
-                                        <i class="fa-solid fa-sm fa-pen-to-square"></i>
-                                        <% end %>
-                                            <%= link_to tweet, method: :delete, data: {turbo_method: :delete,
-                                                turbo_confirm: 'Are you sure?' }, class: "p-2" do %>
-                                                <i class="fa-solid fa-sm fa-trash-can"></i>
-                                                <% end %>
-                        </div>
-                        </p>
+    </div>
+  </div>
+
+
+
                 </div>
             </div>
         </div>
     </div>
+    <hr>
     <% end %>

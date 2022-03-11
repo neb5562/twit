@@ -14,16 +14,15 @@
 
   <body>
   <% if flash[:notice]%>
-  <div class="alert alert-success" role="alert" style="margin-bottom:0!important;">
-       <p class="notice"><%= notice %></p>
+  <div class="alert alert-success" role="alert" style="margin-bottom:0!important;text-align:center;">
+       <%= notice %>
   </div>
   <% end %>
   <% if flash[:alert]%>
-  <div class="alert alert-danger" role="alert" style="margin-bottom:0!important;">
-       <p class="alert"><%= alert %></p>
+  <div class="alert alert-danger" role="alert" style="margin-bottom:0!important;text-align:center;">
+      <%= alert %>
   </div>
   <% end %>
-
   <nav class="navbar navbar-dark bg-primary navbar-expand-lg mb-5">
   <div class="container-fluid">
   <%= link_to root_path, class: "navbar-brand" do %>
@@ -37,10 +36,14 @@
 
       </ul>
       <span class="navbar-text">
-        <%= link_to new_tweet_path, class: "btn btn-light text-black" do %>
-          New Tweet
-        <% end %>
-        <%= link_to "Sign Up", root_path, class: "btn btn-link text-white text-decoration-none" %>
+      <% if user_signed_in? %>
+        <%= link_to "Hi, " + current_user.username, edit_user_registration_path, class: "btn btn-link text-white text-decoration-none"%>
+        <%= link_to "Log Out", destroy_user_session_path,  method: :delete, data: {turbo_method: :delete,
+                                                turbo_confirm: 'Are you sure?' },  class: "btn btn-link text-white text-decoration-none"%>
+      <% else %>
+        <%= link_to "Sign In", new_user_session_path, class: "btn btn-link text-white text-decoration-none" %>
+        <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-link text-white text-decoration-none" %>
+       <% end %>
       </span>
     </div>
   </div>
