@@ -5,5 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :tweet
+  has_many :like
+  has_many :notification
   validates_presence_of :name, :email, :username
 end
