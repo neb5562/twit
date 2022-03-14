@@ -8,6 +8,7 @@ import "controllers"
 
 $(document).on("click", ".like_tweet", function(e){
     $(this).addClass("text-danger");
+    // increment likes count
     var tweet_id = this.getAttribute("tweet");
     var user_id = this.getAttribute("user");
     if (user_id == -1)

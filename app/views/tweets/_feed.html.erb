@@ -53,31 +53,10 @@
 <div class="row">
     <div class="col-2">
 
-                        <div class="btn-group" role="group" aria-label="Basic outlined example">
-                            <%= link_to tweet_path(tweet), class: "p-2", style: "color:#858585" do %>
-                                <i class="fa fa-md fa-solid fa-link"></i>
-                                <%= link_to tweet_path(tweet), class: "p-2", style: "color:#858585" do %>
-                            <i class="fa-solid fa-md fa-repeat"></i>
-                                <% end %>
-                                <% if user_signed_in? %>
-                                    <%= link_to tweet_path(tweet), like: tweet.like.find_by(user_id: current_user.id).nil? ? -1 : tweet.like.find_by(user_id: current_user.id).id, tweet: tweet.id, user: current_user.id, class: "like_tweet p-2  #{'text-danger' if current_user.like.find_by(tweet_id: tweet.id) }", style: "color:#858585" do %>
-                                        <i class="fa-solid fa-md fa-heart"></i>
-                                    <% end %>
-                                <% else %>
-                                    <%= link_to tweet_path(tweet), tweet: tweet.id, user: "-1", class: "like_tweet p-2", style: "color:#858585" do %>
-                                        <i class="fa-solid fa-md fa-heart"></i>
-                                    <% end %>
-                                <% end %>
-                                <% end %>
 
-                        </div>
     </div>
     <div class="col-10">
-<small class="text-muted float-end">
-                                <%= link_to tweet_path(tweet), class: "p-1 text-decoration-none", style: "color:#858585;font-size: 11px;" do %>
-                                    <%= time_ago_in_words(tweet.updated_at).to_s + " ago" %>
-                                        <% end %>
-                            </small>
+
     </div>
   </div>
 
@@ -86,6 +65,39 @@
                 </div>
             </div>
         </div>
+         <div class="row">
+    <div class="col-4 text-center">
+        <%= link_to tweet_path(tweet), class: "p-2", style: "color:#858585" do %>
+          <i class="fa fa-xl fa-solid fa-link"></i>
+        <% end %>
     </div>
-    <hr>
+    <div class="col-4 text-center">
+     <%= link_to tweet_path(tweet), class: "p-2", style: "color:#858585" do %>
+       <i class="fa-solid fa-xl fa-repeat"></i>
+    <% end %>
+    </div>
+    <div class="col-4 text-center">
+ <% if user_signed_in? %>
+                                    <%= link_to tweet_path(tweet), like: tweet.like.find_by(user_id: current_user.id).nil? ? -1 : tweet.like.find_by(user_id: current_user.id).id, tweet: tweet.id, user: current_user.id, class: "like_tweet p-2  #{'text-danger' if current_user.like.find_by(tweet_id: tweet.id) }", style: "color:#858585" do %>
+                                        <i class="fa-solid fa-xl fa-heart"></i>
+                                    <% end %>
+                                <% else %>
+                                    <%= link_to tweet_path(tweet), tweet: tweet.id, user: "-1", class: "like_tweet p-2", style: "color:#858585" do %>
+                                        <i class="fa-solid fa-xl fa-heart"></i>
+                                    <% end %>
+                                <% end %>
+    </div>
+  </div>
+
+    </div>
+            <p class="border-top border-bottom pt-2 pb-2"><b class="retweets">0</b> Retweets, <b class="hearts"><%=tweet.like.count%></b> Likes
+            <small class="text-muted float-end">
+                                <%= link_to tweet_path(tweet), class: "p-1 text-decoration-none", style: "color:#858585;font-size: 11px;" do %>
+                                    <%= time_ago_in_words(tweet.updated_at).to_s + " ago" %>
+                                        <% end %>
+                            </small>
+            
+            </p>
+    
+
     <% end %>
