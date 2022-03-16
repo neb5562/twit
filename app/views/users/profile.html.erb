@@ -1,1 +1,13 @@
-<%=@user%>
+<div class="row">
+    <div class="col-2 order-last">
+      1234
+    </div>
+    <div class="col-7">
+      <%= render "tweets/feed"%> 
+    </div>
+    <div class="col-3 order-first">
+    <% if user_signed_in? %>
+      <%= render "users/profile", user: @user %>
+    <% end %>
+    </div>
+  </div>

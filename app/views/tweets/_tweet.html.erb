@@ -1,7 +1,50 @@
-<div id="<%= dom_id tweet %>">
-  <p>
-    <strong>Tweet:</strong>
-    <%= tweet.tweet %>
-  </p>
-
+<% twt = tweet.child != nil ? tweet.child : tweet %> <div style="margin-left:15px;padding-bottom:15px;" class="text-secondary"><% if tweet.child != nil %> <i class="fa-solid fa-retweet"></i><%=tweet.user.username%> retweeted · <small class="text-muted"><%= link_to tweet_path(tweet), class: "p-1 text-decoration-none", style: "color:#858585;font-size: 11px;" do %><%= time_ago_in_words(tweet.updated_at).to_s + " ago" %><% end %> </small><% end %> </div><%=tweet.tweet%>
+<!-- Modal -->
+<div class="modal fade" id="retweetmodal-<%=twt.id%>" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="d-grid gap-2"><%= simple_form_for(tweet) do |f|%><%= f.error_notification %><%= f.hidden_field :tweet, hidden: true, wrapper: false, value: "~" %><%= f.hidden_field :retweet_tweet_id, hidden: true, wrapper: false, value: twt.id %><%= f.button :submit,"Retweet", class: "form-control btn-primary" %><% end %> <button class="btn btn-primary disabled" type="button">Quote Retweet</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+<div class="card mb-3 border-0">
+  <div class="row g-0">
+    <div class="col-md-2">
+      <img style="max-width:105px;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh2luCjtXnp2tzGjmlQyveWqphByb_Vi08ngH6JTdjcGY0ePuCb6MqE1ac5zV-0dPvb5g&usqp=CAU" class="rounded img-fluid rounded-start" alt="...">
+    </div>
+    <div class="col-md-10">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-10">
+            <h5><%= twt.user.name%> </h5>
+          </div>
+          <div class="col-2">
+            <div class="dropdown"><% if user_signed_in? %><%= link_to("javascript:;", class: "dropdown-toggle btn btnr float-end", style: "color:#cdcdcd;", id: "dropdownMenuLink", data: { 'bs-toggle': "dropdown" }, aria: { expanded: "false"} ) do %> <i class="fa-solid fa-lg fa-ellipsis-vertical"></i><% end %> <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink"><% if current_user.id != twt.user_id %> <li>
+                  <a class="dropdown-item" href="#">Unfollow author</a>
+                </li><% end %> <li><% if current_user.id == twt.user_id %><%= link_to twt, method: :delete, data: {turbo_method: :delete,
+                                                turbo_confirm: 'Are you sure?' }, class: "dropdown-item"  do %> Delete <% end %><% end %> </li>
+              </ul><% end %> </div>
+          </div>
+        </div><%= link_to "@" + twt.user.username , show_user_profile_path("@" << twt.user.username) , class: "h8 card-title text-decoration-none text-secondary"%> · <small class="text-muted"><%= link_to tweet_path(twt), class: "p-1 text-decoration-none", style: "color:#858585;font-size: 11px;" do %><%= time_ago_in_words(twt.updated_at).to_s + " ago" %><% end %> </small>
+        <p class="card-text"><%= twt.tweet.gsub(/(#)\S+/, '
+						<a href="hashtag/\0">\0</a>').gsub(/(@)\S+/, '
+						<a href="profile/\0">\0</a>').html_safe %> </p>
+        <div class="row">
+          <div class="col-2"></div>
+          <div class="col-10"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-4 text-center"><%= link_to tweet_path(twt), class: "p-2", style: "color:#858585" do %> <i class="fa fa-solid fa-xl fa-comment"></i><% end %> </div>
+    <div class="col-4 text-center" data-bs-toggle="modal" data-bs-target="#retweetmodal-<%=twt.id%>"><%= link_to "javascript:;", class: "p-2 #{'retweet-color' if user_signed_in? && current_user.tweet.find_by(retweet_tweet_id: twt.id) }", style: "color:#858585" do %> <i class="fa-solid fa-xl fa-repeat"></i><% end %> </div>
+    <div class="col-4 text-center"><% if user_signed_in? %><%= link_to tweet_path(twt), like: twt.like.find_by(user_id: current_user.id).nil? ? -1 : twt.like.find_by(user_id: current_user.id).id, tweet: twt.id, user: current_user.id, class: "like_tweet p-2  #{'text-danger' if current_user.like.find_by(tweet_id: twt.id) }", style: "color:#858585" do %> <i class="fa-solid fa-xl fa-heart"></i><% end %><% else %><%= link_to tweet_path(twt), tweet: twt.id, user: "-1", class: "like_tweet p-2", style: "color:#858585" do %> <i class="fa-solid fa-xl fa-heart"></i><% end %><% end %> </div>
+  </div>
+</div>
+<p class="border-top border-bottom pt-2 pb-2">
+  <b class="retweets">0</b> Retweets, <b class="hearts-<%=twt.id%>"><%=twt.like.count%> </b> Likes
+</p>

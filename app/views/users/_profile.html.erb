@@ -1,11 +1,19 @@
 <div class="card mb-4">
  <div class="card-header p-3">
-        <div class=" image d-flex flex-column justify-content-center align-items-center"> <button class="btn btn-secondary"> <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh2luCjtXnp2tzGjmlQyveWqphByb_Vi08ngH6JTdjcGY0ePuCb6MqE1ac5zV-0dPvb5g&usqp=CAU" height="100" width="100" /></button> <span class="name mt-3"><%= current_user.name %></span> <span class="idd">@<%= current_user.username %></span>
-            <div class="d-flex flex-row justify-content-center align-items-center mt-3"> <span class="number">-1 <span class="follow">Followers</span></span> </div>
+        <div class=" image d-flex flex-column justify-content-center align-items-center"> <button class="btn btn-secondary"> <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh2luCjtXnp2tzGjmlQyveWqphByb_Vi08ngH6JTdjcGY0ePuCb6MqE1ac5zV-0dPvb5g&usqp=CAU" height="100" width="100" /></button> <span class="name mt-3"><%= @user.name %></span> <span class="idd">@<%= @user.username %></span>
+            <div class="d-flex flex-row justify-content-center align-items-center mt-3"> <span class="number"> <%= @user.follower.count%> </span><span class="follow">&nbsp;<%=@user.follower.count < 2 ? "Follower" : "Followers" %></span> </div>
             <div class=" d-flex mt-2">
-            <%= link_to "Edit Profile", edit_user_registration_path, class: "btn btn-dark" %>
+            <% if current_user.id != @user.id %>
+
+            <% if @user.follower.find_by(follow: current_user.id) %>
+                <%= link_to "Unfollow", "javascript:;", class: "btn follow-profile btn-outline-primary", follow: current_user.id, user_id: @user.id%>
+            <% else %>
+                <%= link_to "Follow", "javascript:;", class: "btn follow-profile btn-primary", follow: current_user.id, user_id: @user.id %>
+            <% end %>
+            
+            <% end %>
             </div>
-            <div class=" px-2 rounded mt-4 date "> <span class="join">Joined <%= current_user.created_at.strftime("%b, %Y") %></span> </div>
+            <div class=" px-2 rounded mt-4 date "> <span class="join">Joined <%= @user.created_at.strftime("%b, %Y") %></span> </div>
         </div>
     </div>
     </div>

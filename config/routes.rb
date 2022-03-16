@@ -7,5 +7,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "tweets#index"
   get "users/:name", to: "users#profile", as: 'show_user_profile'
-  
+  post "follow", to: "users#follow", as: "follow_user"
+  delete "follow", to: "users#unfollow", as: "unfollow_user"
+
 end

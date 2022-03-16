@@ -12,6 +12,31 @@ class UsersController < ApplicationController
 
   def profile
     @user = User.find_by(username: params[:name].to_s[1..-1])
+    @tweets = @user.tweet.all.order(created_at: :desc)
+  end
+
+  def follow
+    @follow = Follower.new(user_id: params[:user_id], follow: params[:follow])
+
+    respond_to do |format|
+      if @follow.save
+        format.html {}
+        format.json { render json: @follow.to_json }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @follow.errors, status: :unprocessable_entity }
+      end
+    end
+
+  end
+
+  def unfollow
+    @unfollow = Follower.find_by(user_id: params[:user_id], follow: params[:follow]).destroy
+
+    respond_to do |format|
+        format.html {}
+        format.json { render json: @unfollow.to_json }
+    end
   end
 
   # GET /users/new
@@ -78,6 +103,7 @@ class UsersController < ApplicationController
   def account_update_params 
   params.require(:user).permit(:name, :username, :email, :password, :password_confirmation, :current_password)
   end
+
 end
 
 

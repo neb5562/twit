@@ -6,6 +6,7 @@ class TweetsController < ApplicationController
   def index
     @tweets = Tweet.all.order("created_at DESC")
     @tweet = Tweet.new
+    @user = current_user
   end
 
   # GET /tweets/1 or /tweets/1.json
@@ -73,6 +74,6 @@ class TweetsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def tweet_params
-      params.require(:tweet).permit(:tweet)
+      params.require(:tweet).permit(:tweet, :retweet_tweet_id)
     end
 end
