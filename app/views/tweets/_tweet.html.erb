@@ -60,7 +60,7 @@
 			<% if tweet.child != nil %>
 				<div class="card-body">
 					<div class="row">
-						<div class="col-2"> <img style="margin-left: 15px;  max-width:80px;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh2luCjtXnp2tzGjmlQyveWqphByb_Vi08ngH6JTdjcGY0ePuCb6MqE1ac5zV-0dPvb5g&usqp=CAU" class="rounded img-fluid rounded-start" alt="..."> </div>
+						<div class="col-2"> <img style="margin-left: 15px;  max-width:80px;" src="https://ui-avatars.com/api/?background=random&length=3&name=<%=tweet.user.name[0,3]%>" class="rounded img-fluid rounded-start" alt="..."> </div>
 						<% end %>
 							<div class="col-<%=tweet.child != nil ? '8' : '10' %>">
 								<p class="float-start">
@@ -127,11 +127,11 @@
 										<div class="card-body">
 											<div class="row">
 												<% if tweet.child == nil %>
-													<div class="col-2"> <img style="margin-left: 15px;  max-width:80px;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh2luCjtXnp2tzGjmlQyveWqphByb_Vi08ngH6JTdjcGY0ePuCb6MqE1ac5zV-0dPvb5g&usqp=CAU" class="rounded img-fluid rounded-start" alt="..."> </div>
+													<div class="col-2"> <img style="margin-left: 15px;  max-width:80px;" src="https://ui-avatars.com/api/?background=random&length=3&name=<%=tweet.user.name[0,3]%>" class="rounded img-fluid rounded-start" alt="..."> </div>
 													<% end %>
 														<div class="col-<%=tweet.child == nil ? '8' : '10' %>">
 															<% if tweet.child != nil %>
-																<div class="float-start"> <img style="max-width: 30px;margin-right: 10px;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh2luCjtXnp2tzGjmlQyveWqphByb_Vi08ngH6JTdjcGY0ePuCb6MqE1ac5zV-0dPvb5g&usqp=CAU" class="rounded img-fluid rounded-start" alt="..."> </div>
+																<div class="float-start"> <img style="max-width: 30px;margin-right: 10px;" src="https://ui-avatars.com/api/?background=random&length=3&name=<%=twt.user.name[0,3]%>" class="rounded img-fluid rounded-start" alt="..."> </div>
 																<% end %>
 																	<p class="float-start">
 																		<%= twt.user.name%>&nbsp;
