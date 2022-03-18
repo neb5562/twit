@@ -5,8 +5,5 @@
     </div>
     <div class="col-10">
         <%= render @tweet %>
-      <%= link_to @tweet, method: :delete, data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'}, class: "p-2" do %>
-        <i class="fa-solid fa-sm fa-trash-can"></i>
-      <% end %> 
     </div>
   </div>

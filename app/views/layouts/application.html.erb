@@ -31,7 +31,64 @@
     padding-top: 5px;
     padding-left: 5px;
     border-radius: 10px;
+    background-color:#fbfafa;
    }
+   .mn-navbar
+   {
+          position: fixed;
+    left: 50%;
+    z-index: 1000;
+    transform: translate(-50%, 0);
+    
+   }
+   .digg_pagination {
+  background: white;
+  cursor: default;
+  /* self-clearing method: */ }
+  .digg_pagination a, .digg_pagination span, .digg_pagination em {
+    padding: 0.2em 0.5em;
+    display: block;
+    float: left;
+    margin-right: 1px; }
+  .digg_pagination .disabled {
+    color: #999999;
+    border: 1px solid #dddddd; }
+  .digg_pagination .current {
+    font-style: normal;
+    font-weight: bold;
+    background: CornflowerBlue;
+    color: white;
+
+}
+  .digg_pagination a {
+    text-decoration: none;
+    color: CornflowerBlue;
+    border: 1px solid #9aafe5; }
+    .digg_pagination a:hover, .digg_pagination a:focus {
+      color: #000033;
+      border-color: #000033; }
+  .digg_pagination .page_info {
+    background: #2e6ab1;
+    color: white;
+    padding: 0.4em 0.6em;
+    width: 22em;
+    margin-bottom: 0.3em;
+    text-align: center; }
+    .digg_pagination .page_info b {
+      color: #000033;
+      background: #6aa6ed;
+      padding: 0.1em 0.25em; }
+  .digg_pagination:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden; }
+  * html .digg_pagination {
+    height: 1%; }
+  *:first-child + html .digg_pagination {
+    overflow: hidden; 
+}
     </style>
     <%= javascript_importmap_tags %>
     <%= javascript_include_tag "rails" %>
@@ -47,29 +104,20 @@
 
   <body>
 
-  <% if flash[:notice]%>
-  <div class="alert alert-success" role="alert" style="margin-bottom:0!important;text-align:center;">
-       <%= notice %>
-  </div>
-  <% end %>
-  <% if flash[:alert]%>
-  <div class="alert alert-danger" role="alert" style="margin-bottom:0!important;text-align:center;">
-      <%= alert %>
-  </div>
-  <% end %>
 
-<div class="container bg-secondary"> 
-   <nav class="navbar navbar-dark navbar-expand-lg mb-3">
+
+<div class="container mn-navbar shadow rounded" style="background-color:CornflowerBlue;"> 
+   <nav class="navbar navbar-dark navbar-expand-lg">
          <div class="col-2">
             <%= link_to root_path, class: "navbar-brand" do %>
             <h1 class="title float-start">Tweet</h1>
-            <img onClick="javascript:window.open('https://donate.redcross.org.uk/appeal/ukraine-crisis-appeal', '_blank');" width=30 alt="Ukraine-coloured heart float-start" class="c-icon ms-3 mt-2" src="https://d24y9kuxp2d7l2.cloudfront.net/assets/icons/ukraine-ddee71b9968c24f6ffad2d0967fe8f39d2d00dd8.svg">  
+            <img onClick="javascript:window.open('https://donate.redcross.org.uk/appeal/ukraine-crisis-appeal', '_blank');" width=25 alt="Ukraine-coloured heart float-start" class="c-icon ms-3 mt-3" src="https://d24y9kuxp2d7l2.cloudfront.net/assets/icons/ukraine-ddee71b9968c24f6ffad2d0967fe8f39d2d00dd8.svg">  
             <% end %>
          </div>
          <div class="col-7">
             <div class="input-group">
                <input type="text" class="form-control" placeholder="Search twitter" aria-label="Search twitter" aria-describedby="button-addon2">
-               <button class="btn btn-primary" type="button" id="button-addon2">Search</button>
+               <button class="btn btn-secondary" type="button" id="button-addon2">Search</button>
             </div>
          </div>
 
@@ -82,11 +130,17 @@
                <span class="navbar-text">
                <% if user_signed_in? %>
                <%= link_to root_path do %>
-               <i class="fa-solid fa-lg fa-bell"></i>
+               
+               <a class="position-relative" href="#">
+                  <i class="fa-solid fa-lg fa-bell"></i> <span class="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-1"><span class="visually-hidden">unread messages</span></span>
+               </a>
                <% end %> 
                <%= link_to "Hi, " + current_user.username, edit_user_registration_path, class: "btn btn-link text-white text-decoration-none"%>
+<!--
                <%= link_to "Log Out", destroy_user_session_path,  method: :delete, data: {turbo_method: :delete,
                   turbo_confirm: 'Are you sure?' },  class: "btn btn-link text-white text-decoration-none"%>
+-->
+                  <%= link_to "Log Out", destroy_user_session_path,'data-turbo-method': :delete , class:"btn btn-link text-white text-decoration-none" %>
                <% else %>
                <%= link_to "Sign In", new_user_session_path, class: "btn btn-link text-white text-decoration-none" %>
                <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-link text-white text-decoration-none" %>
@@ -96,7 +150,20 @@
          </div>
       </nav>
       </div>
-    <div class="container">
+    <div class="container" style="padding-top: 105px;">
+      <% if flash[:notice]%>
+  <div class="alert alert-success" role="alert" style="margin-bottom:0!important;text-align:center;">
+       <%= notice %>
+  </div>
+  <br> 
+  <% end %>
+  <% if flash[:alert]%>
+  <div class="alert alert-danger" role="alert" style="margin-bottom:0!important;text-align:center;">
+      <%= alert %>
+  </div>
+ <br> 
+  <% end %>
+  
         <%= yield %>
     </div>
 

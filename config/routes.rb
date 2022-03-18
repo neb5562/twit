@@ -9,5 +9,6 @@ Rails.application.routes.draw do
   get "users/:name", to: "users#profile", as: 'show_user_profile'
   post "follow", to: "users#follow", as: "follow_user"
   delete "follow", to: "users#unfollow", as: "unfollow_user"
+  get "retweet/:id", to: "tweets#retweet", as: "retweet_tweet"
 
 end

@@ -4,13 +4,15 @@ class TweetsController < ApplicationController
 
   # GET /tweets or /tweets.json
   def index
-    @tweets = Tweet.all.order("created_at DESC")
+    #@tweets = Tweet.all.order("created_at DESC") #limit(5).
+    @tweets = Tweet.paginate(page: params[:page]).order("created_at DESC")
     @tweet = Tweet.new
     @user = current_user
   end
 
   # GET /tweets/1 or /tweets/1.json
   def show
+    
   end
 
   # GET /tweets/new
@@ -35,6 +37,10 @@ class TweetsController < ApplicationController
         format.json { render json: @tweet.errors, status: :unprocessable_entity }
       end
     end
+  end
+  
+  def retweet
+    @tweet = Tweet.find_by(id: params[:id])
   end
 
   # PATCH/PUT /tweets/1 or /tweets/1.json

@@ -1,6 +1,6 @@
 <div class="card mb-5">
  <div class="card-header">
- <%= simple_form_for(@tweet) do |f|%>
+ <%= simple_form_for(Tweet.new) do |f|%>
   <%= f.error_notification %>
   <div class="col-auto mb-3">
     <%= f.input :tweet, input_html: { class: "textarea form-control", rows: 4}, wrapper: false, label_html: { class: "label"}, placeholder: "Tweet text"%>
@@ -9,7 +9,7 @@
 
   <div class="col-auto mb-3 float-end">
   <i class="fa-solid fa-2xl fa-image"></i>
-    <%= f.button :submit, class: "btn btn-primary btn-md" %>
+    <%= f.button :submit, class: "text-white btn btn-md", style:"background-color:CornflowerBlue;" %>
   </div>
 <% end %>
  </div>

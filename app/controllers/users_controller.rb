@@ -12,7 +12,7 @@ class UsersController < ApplicationController
 
   def profile
     @user = User.find_by(username: params[:name].to_s[1..-1])
-    @tweets = @user.tweet.all.order(created_at: :desc)
+    @tweets = @user.tweet.paginate(page: params[:page]).order("created_at DESC")
   end
 
   def follow

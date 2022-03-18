@@ -1,15 +1,5 @@
 <div class="row">
-    <div class="col-2 order-last">
-      1234
-    </div>
-    <div class="col-7">
-      <%= render "form" %>
-      <%= render "feed" %>
-    </div>
-    <div class="col-3 order-first">
-    <% if user_signed_in? %>
-      <%= render "users/profile" %>
-    <% end %>
+    <div class="col-md-2 order-last">
     <div class="card">
   <div class="card-header">
     Trending Hash Tags
@@ -23,4 +13,19 @@
   </ul>
 </div>
     </div>
+    <div class="col-md-8">
+      <%= render "form" %>
+      <%= render "feed" %>
+    </div>
+    <div class="col-md-2 order-first">
+    <% if user_signed_in? %>
+      <%= render "users/profile" %>
+    <% end %>
+<div class="d-grid gap-2 mb-4">
+<%= link_to "Public feed", root_path, class: "btn text-white", style: "background-color:CornflowerBlue;" %>
+<%= link_to "Personal feed", root_path, class: "btn text-white", style: "background-color:CornflowerBlue;" %>
+</div>
+
+    </div>
   </div>
+
