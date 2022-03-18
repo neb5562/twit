@@ -1,6 +1,7 @@
 <div class="card mb-4">
  <div class="card-header p-3">
-        <div class=" image d-flex flex-column justify-content-center align-items-center"> <button class="btn btn-secondary"> <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh2luCjtXnp2tzGjmlQyveWqphByb_Vi08ngH6JTdjcGY0ePuCb6MqE1ac5zV-0dPvb5g&usqp=CAU" height="100" width="100" /></button> <span class="name mt-3"><%= @user.name %></span> <span class="idd">@<%= @user.username %></span>
+        <div class=" image d-flex flex-column justify-content-center align-items-center"> 
+         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh2luCjtXnp2tzGjmlQyveWqphByb_Vi08ngH6JTdjcGY0ePuCb6MqE1ac5zV-0dPvb5g&usqp=CAU" height="100" width="100" /> <span class="name mt-3"><%= @user.name %></span> <span class="idd">@<%= @user.username %></span>
             <div class="d-flex flex-row justify-content-center align-items-center mt-3"> <span class="number"> <%= @user.follower.count%> </span><span class="follow">&nbsp;<%=@user.follower.count < 2 ? "Follower" : "Followers" %></span> </div>
             <div class=" d-flex mt-2">
             <% if current_user.id != @user.id %>
