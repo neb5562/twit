@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_21_075756) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_21_123541) do
   create_table "followers", force: :cascade do |t|
     t.integer "follow"
     t.integer "user_id"
@@ -28,10 +28,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_21_075756) do
 
   create_table "notifications", force: :cascade do |t|
     t.boolean "seen"
-    t.integer "type"
+    t.integer "notification_type"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "from"
+    t.integer "tweet_id"
   end
 
   create_table "tweets", force: :cascade do |t|

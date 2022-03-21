@@ -4,9 +4,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_many :tweet
-  has_many :follower
+  has_many :tweet, dependent: :delete_all
+  has_many :follower, dependent: :delete_all
   has_many :like
-  has_many :notification
+  has_many :notification, dependent: :delete_all
   validates_presence_of :name, :email, :username
 end

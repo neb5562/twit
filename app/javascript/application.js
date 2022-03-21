@@ -13,11 +13,16 @@ $(document).on("click", ".like_tweet:not('.text-danger')", function(e){
     var tweet_id = this.getAttribute("tweet");
     var user_id = this.getAttribute("user");
     // increment likes count
-    var likes_count = this.getAttribute("likes_count");
     var likes_html = $(".hearts-"+tweet_id).html();
-    var update_likes_count = 
-    $(".hearts-"+tweet_id).html(likes_html.replace(/[0-9]/, parseInt(likes_count)+1));
-    this.setAttribute("likes_count", "democlass");
+    var likes_count = likes_html.match(/\d+/)[0];
+    var word = "Like";
+    if (likes_count == 1)
+    {   
+        word += "s";
+    }
+
+    $(".hearts-"+tweet_id).html((parseInt(likes_count)+1).toString() + " " + word);
+
     if (user_id == -1)
     {
         return window.location.replace("users/sign_in");
@@ -56,9 +61,16 @@ $(document).on("click", ".like_tweet.text-danger", function(e){
     var tweet_id = this.getAttribute("tweet");
     var user_id = this.getAttribute("user");
     var like_id = this.getAttribute("like");
-    var likes_count = this.getAttribute("likes_count");
     var likes_html = $(".hearts-"+tweet_id).html();
-    $(".hearts-"+tweet_id).html(likes_html.replace(/[0-9]/, parseInt(likes_count)-1));
+    var likes_count = likes_html.match(/\d+/)[0];
+    var word = "Like";
+    if (likes_count == 1)
+    {   
+        word += "s";
+    }
+
+    $(".hearts-"+tweet_id).html((parseInt(likes_count)-1).toString() + " " + word);
+
     if (user_id == -1)
     {
         return window.location.replace("users/sign_in");

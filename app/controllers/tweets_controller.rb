@@ -1,7 +1,7 @@
 class TweetsController < ApplicationController
   before_action :set_tweet, only: %i[ show edit destroy ]
   before_action :authenticate_user!, except: [:index, :show]
-
+  after_action :add_notifications_to_db, only: [:create]
   # GET /tweets or /tweets.json
   def index
     #@tweets = Tweet.all.order("created_at DESC") #limit(5).
@@ -58,23 +58,26 @@ class TweetsController < ApplicationController
 
   # DELETE /tweets/1 or /tweets/1.json
   def destroy
-    if @tweet.user_id == current_user.id
-      #@tweet.destroy
-      @tweet.deleted = true
-      @tweet.save
-      respond_to do |format|
+    respond_to do |format|
+      if @tweet.user_id == current_user.id
+        @tweet.destroy
         format.html { redirect_to tweets_url, notice: "Tweet was successfully destroyed." }
         format.json { head :no_content }
-      end
-    else
-      respond_to do |format|
+      else
         format.html { redirect_to tweets_url, alert: "No permission" }
         format.json { head :no_content }
       end
     end
-
   end
   private
+    def add_notifications_to_db
+      followers = Follower.where(user_id: current_user.id)
+      notifications = []
+      followers.each do |f|
+        notifications.push({ seen: false, notification_type: 1, user_id: f.follow, from: current_user.id, tweet_id: Tweet.where(user_id:current_user.id).last.id })
+      end
+      Notification.insert_all(notifications)
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_tweet
       @tweet = Tweet.find(params[:id])

@@ -89,6 +89,19 @@
   *:first-child + html .digg_pagination {
     overflow: hidden; 
 }
+.notification-dot
+{
+  position: absolute;
+    top: 8px;
+    left: 12px;
+    font-size: 15px;
+    background-color: #f57272;
+    border-radius: 19px;
+    width: 20px;
+    height: 20px;
+    padding-left: 5px;
+    padding-bottom: 5px;
+}
     </style>
     <%= javascript_importmap_tags %>
     <%= javascript_include_tag "rails" %>
@@ -129,12 +142,36 @@
             <div class="collapse navbar-collapse float-end" id="navbarText">
                <span class="navbar-text">
                <% if user_signed_in? %>
-               <%= link_to root_path do %>
+              <div class="dropdown float-start p-2">
+                <a class="dropdown-toggle" type="button" style="position:relative;" aria-expanded="true" data-bs-toggle = "dropdown">
+                  <i class="fa-solid fa-lg fa-bell"></i>
+                  <% if current_user.notification.count > 0 %>
+                    <div class="notification-dot"><%=current_user.notification.count.to_s[0,1] %></div>
+                  <% end %>
+                </a>
+                
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <% if current_user.notification.count > 0 %>
+
+                  <% current_user.notification.each do | n | %>
+                    <% if n.notification_type == 1 %>
+                      <li>
+                      <%=link_to "#{n.sender.username} Tweeted \"#{Tweet.find_by(id: n.tweet_id).tweet[0,10]}\"", tweet_path(n.tweet_id), class: "text-dark dropdown-item" %>
+                      </li>
+                    <% elsif %>
+                    1
+                    <% end %>
+                  
+                  <% end %>
+
+
+                <% else %>
+                  <li class="text-dark dropdown-item">No new notifications</li>
+                <% end %>
+                </ul>
                
-               <a class="position-relative" href="#">
-                  <i class="fa-solid fa-lg fa-bell"></i> <span class="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-1"><span class="visually-hidden">unread messages</span></span>
-               </a>
-               <% end %> 
+              </div>
+
                <%= link_to "Hi, " + current_user.username, edit_user_registration_path, class: "btn btn-link text-white text-decoration-none"%>
 <!--
                <%= link_to "Log Out", destroy_user_session_path,  method: :delete, data: {turbo_method: :delete,
