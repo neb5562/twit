@@ -1,197 +1,160 @@
-<% twt = tweet.child != nil ? tweet.child : tweet %>
-	<% if tweet.child != nil && tweet.tweet == "~"  %>
-
-		<div style="padding-bottom:5px; position:relative;" class="text-secondary"> 
-    <div class="row">
-      <div class="col-10">
-    <i class="fa-solid fa-retweet"></i>
-			<%=" "+ tweet.user.username%> retweeted · 
-      <small class="text-muted">
-      <%= link_to tweet_path(tweet), class: "p-1 text-decoration-none", style: "color:#858585;font-size: 11px;" do %>
-        <%= time_ago_in_words(tweet.updated_at).to_s + " ago" %>
-      <% end %> 
-    </small>
-      </div>
-      <div class="col-2">
-    								<div class="dropdown">
-									<% if user_signed_in? %>
-										<% if tweet.child != nil%>
-											<%= link_to("javascript:;", class: "dropdown-toggle btn btnr float-end", style: "color:#cdcdcd;", id: "dropdownMenuLink", data: { 'bs-toggle': "dropdown" }, aria: { expanded: "false"} ) do %> <i class="fa-solid fa-lg fa-ellipsis"></i>
-												<% end %>
-													<% end %>
-														<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-															<% if current_user.id != tweet.user_id %>
-																<li> <a class="dropdown-item" href="#">Unfollow author</a> </li>
-																<% end %>
-																	<% if current_user.id == tweet.user_id %>
-																		<li>
-																			<%= link_to tweet, method: :delete, data: {turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "dropdown-item"  do %> Delete
-																				<% end %>
-																		</li>
-																		<% end %>
-														</ul>
-														<% end %>
-								</div>
-    
-     </div>
-    
-      </div>
+<div class="card main-tweet mb-4 pb-2 border-0" style="margin-top:10px;">
+    <div class="row g-0">
+        <div class="">
+            <div class="card-body">
+                <div class="row">   
+                    <div class="col-1" style="padding-left:0px!important;"> 
+                        <img style="max-width:60px;" src="https://ui-avatars.com/api/?background=random&amp;length=3&amp;name=<%=tweet.user.username[0,3]%>" class="rounded img-fluid rounded-start" alt="..."> 
+                    </div>
+                        <div class="col-11">
+                            <div class="dropdown float-end">
+                                <a class="dropdown-toggle btn btnr float-end" style="color:#cdcdcd;" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" href="javascript:;"> 
+                                <i class="fa-solid fa-lg fa-ellipsis"></i>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+									<% if user_signed_in? && current_user.id == tweet.user_id %>
+                                        <li>
+                                            <%= link_to tweet, method: :delete, data: {turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "dropdown-item"  do %> Delete
+                                            <% end %>
+                                        </li>
+									<% end %>
+									<% if user_signed_in? && current_user.id != tweet.user_id %>
+									<li> 
+                                    <a class="dropdown-item" href="#">Unfollow author</a> 
+                                    </li>
+									<% end %>
+                                </ul>
+                            </div>
+                            <p class="float-start">
+                            
+							<%= link_to "@" + tweet.user.username , show_user_profile_path("@" << tweet.user.username) , class: "h8 card-title text-decoration-none text-secondary"%>
+                                · <small class="text-muted">
+							    <%= link_to tweet_path(tweet), class: "p-1 text-decoration-none", style: "color:#858585;font-size: 11px;" do %>
+                                    <%= time_ago_in_words(tweet.updated_at).to_s + " ago" %>
+                                <% end %> 
+                                </small> 
+                            </p>
+                            <p style="display: inline-block; width:100%;">
+                            <% if tweet.tweet != '~' %>
+                             <%= h(tweet.tweet).gsub(/(#)\S+/, '<a href="hashtag/\0">\0</a>').gsub(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/, '<a target="_blank" href="\0">\0</a>').gsub(/(@)\S+/, '<a href="profile/\0">\0</a>').html_safe %>
+                            <% end %>
+                            </p>
+<% if tweet.child != nil %>
+<% if tweet.child.deleted == false %>
+<div class="card child-tweet mb-2 border-0">
+    <div class="row g-0  retweet_border ">
+        <div class="">
+            <div class="card-body">
+                <div class="row">
+                <div class="col-10">
+                <div class="float-start"> 
+                <img style="max-width: 30px;margin-right: 10px;" src="https://ui-avatars.com/api/?background=random&amp;length=3&amp;name=<%=tweet.child.user.username[0,3]%>" class="rounded img-fluid rounded-start" alt="..."> 
+                </div>
+                <p class="float-start">
+                <%=tweet.child.user.name%>&nbsp;
+                <a class="h8 card-title text-decoration-none text-secondary" href="/users/@neb5562">@<%=tweet.child.user.username%></a>
+                · <small class="text-muted">
+                <%= link_to tweet_path(tweet.child), style: "color:#858585;font-size: 11px;", class: "text-decoration-none" do%>
+                 <%= time_ago_in_words(tweet.child.updated_at).to_s + " ago" %>
+                <% end %>
+                </small> 
+                </p>
+                <p style="display: inline-block; width:100%;">
+                    <%= h(tweet.child.tweet).gsub(/(#)\S+/, '<a href="hashtag/\0">\0</a>').gsub(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/, '<a target="_blank" href="\0">\0</a>').gsub(/(@)\S+/, '<a href="profile/\0">\0</a>').html_safe %>
+                </p>
+                </div>
+                <div class="col-2">
+                <div class="dropdown">
+                <a class="dropdown-toggle btn btnr float-end" style="color:#cdcdcd;" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" href="javascript:;"> 
+                <i class="fa-solid fa-lg fa-ellipsis"></i>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <li>
+                <a data-turbo-method="delete" data-turbo-confirm="Are you sure?" class="dropdown-item" rel="nofollow" data-method="delete" href="/tweets/22"> Delete
+                </a>
+                </li>
+                </ul>
+                </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- row g-0 -->
+</div>
+<% else %>
+<div class="card child-tweet mb-2 border-0">
+    <div class="row g-0  retweet_border ">
+        <div class="">
+            <div class="card-body">
+                <div class="row">
+                <div class="col-10">
+                <div class="float-start"> 
+                Tweet Unavailable ☹️
+                </div>
+                </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		<% elsif tweet.child != nil && tweet.tweet != "~"  %>
-			<% if tweet.child != nil %>
-				<div class="card-body">
-					<div class="row">
-						<div class="col-2"> <img style="margin-left: 15px;  max-width:80px;" src="https://ui-avatars.com/api/?background=random&length=3&name=<%=tweet.user.name[0,3]%>" class="rounded img-fluid rounded-start" alt="..."> </div>
+</div>
+<% end %>
+<% end %>
+                        </div>
+                </div>
+            </div>
+        </div>
+                        </div> <!-- row g-0 -->
+                        <div class="row  mt-2">
+                        <div class="col-3 text-center">
+							<%= link_to tweet_path(tweet), class: "p-2", style: "color:#858585" do %> 
+                            <i class="fa fa-solid fa-xl fa-comment"></i>
+							<% end %>
+                        </div>
+                        <div class="col-3 text-center">
+                        <div class="dropdown">
+						<%= link_to "#", class: "dropdown-toggle p-2 #{'retweet-color' if user_signed_in? && current_user.tweet.find_by(retweet_tweet_id: tweet.id) }", style: "color:#858585", id: "dropdownMenuLink", data: {"bs-toggle": "dropdown"}, aria: {expanded:"false"} do %> 
+                            <i class="fa-solid fa-xl fa-retweet"></i>
 						<% end %>
-							<div class="col-<%=tweet.child != nil ? '8' : '10' %>">
-								<p class="float-start">
-									<%= tweet.user.name%>&nbsp;
-										<%= link_to "@" + tweet.user.username , show_user_profile_path("@" << tweet.user.username) , class: "h8 card-title text-decoration-none text-secondary"%> · <small class="text-muted"><%= link_to tweet_path(tweet), class: "p-1 text-decoration-none", style: "color:#858585;font-size: 11px;" do %>
-            <%= time_ago_in_words(tweet.updated_at).to_s + " ago" %>
-            <% end %> 
-            </small> </p>
-								<p style="display: inline-block; width:100%;">
-									<%= h(tweet.tweet).gsub(/(#)\S+/, '
-						
-									<a href="hashtag/\0">\0</a>').gsub(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/, '
-									<a target="_blank" href="\0">\0</a>').gsub(/(@)\S+/, '
-						
-									<a href="profile/\0">\0</a>').html_safe %> </p>
-							</div>
-							<div class="col-2">
-								<div class="dropdown">
-									<% if user_signed_in? %>
-										<% if tweet.child != nil%>
-											<%= link_to("javascript:;", class: "dropdown-toggle btn btnr float-end", style: "color:#cdcdcd;", id: "dropdownMenuLink", data: { 'bs-toggle': "dropdown" }, aria: { expanded: "false"} ) do %> <i class="fa-solid fa-lg fa-ellipsis"></i>
-												<% end %>
-													<% end %>
-														<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-															<% if current_user.id != tweet.user_id %>
-																<li> <a class="dropdown-item" href="#">Unfollow author</a> </li>
-																<% end %>
-																	<% if current_user.id == tweet.user_id %>
-																		<li>
-																			<%= link_to tweet, method: :delete, data: {turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "dropdown-item"  do %> Delete
-																				<% end %>
-																		</li>
-																		<% end %>
-														</ul>
-														<% end %>
-								</div>
-							</div>
-					</div>
-				</div>
-				<% end %>
-					<!-- Modal -->
-					<div class="modal fade" id="retweetmodal-<%=twt.id%>" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-						<div class="modal-dialog modal-dialog-centered">
-							<div class="modal-content">
-								<div class="modal-body">
-									<div class="d-grid gap-2">
-										<%= simple_form_for(Tweet.new) do |f|%>
-											<%= f.error_notification %>
-												<%= f.hidden_field :tweet, hidden: true, wrapper: false, value: "~" %>
-													<%= f.hidden_field :retweet_tweet_id, hidden: true, wrapper: false, value: tweet.tweet != '~' ? tweet.id : twt.id %>
-														<%= f.button :submit,"Retweet", class: "btn text-white form-control", style: "background-color:CornflowerBlue;"  %>
-															<% end %>
-																<%= link_to "Quote retweet", retweet_tweet_path(id: ((tweet.child != nil && tweet.tweet != '~') ? tweet.id : twt.id) ), class: "btn text-white", style: "background-color:CornflowerBlue;" %>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="card mb-2 border-0" style="margin-top:10px;">
-						<div class="row g-0 <%= tweet.child != nil ? " retweet_border " : " " %>">
-							<% if tweet.child == nil %>
-								<% end %>
-									<div class="">
-										<div class="card-body">
-											<div class="row">
-												<% if tweet.child == nil %>
-													<div class="col-2"> <img style="margin-left: 15px;  max-width:80px;" src="https://ui-avatars.com/api/?background=random&length=3&name=<%=tweet.user.name[0,3]%>" class="rounded img-fluid rounded-start" alt="..."> </div>
-													<% end %>
-														<div class="col-<%=tweet.child == nil ? '8' : '10' %>">
-															<% if tweet.child != nil %>
-																<div class="float-start"> <img style="max-width: 30px;margin-right: 10px;" src="https://ui-avatars.com/api/?background=random&length=3&name=<%=twt.user.name[0,3]%>" class="rounded img-fluid rounded-start" alt="..."> </div>
-																<% end %>
-																	<p class="float-start">
-																		<%= twt.user.name%>&nbsp;
-																			<%= link_to "@" + twt.user.username , show_user_profile_path("@" << twt.user.username) , class: "h8 card-title text-decoration-none text-secondary"%> · <small class="text-muted"><%= link_to tweet_path(twt), class: "p-1 text-decoration-none", style: "color:#858585;font-size: 11px;" do %>
-            <%= time_ago_in_words(twt.updated_at).to_s + " ago" %>
-            <% end %> 
-            </small> </p>
-																	<p style="display: inline-block; width:100%;">
-																		<%= h(twt.tweet).gsub(/(#)\S+/, '
-						
-									<a href="hashtag/\0">\0</a>').gsub(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/, '
-									<a target="_blank" href="\0">\0</a>').gsub(/(@)\S+/, '
-						
-									<a href="profile/\0">\0</a>').html_safe %> </p>
-														</div>
-														<div class="col-2">
-															<div class="dropdown">
-																<% if user_signed_in? %>
-																	<%= link_to("javascript:;", class: "dropdown-toggle btn btnr float-end", style: "color:#cdcdcd;", id: "dropdownMenuLink", data: { 'bs-toggle': "dropdown" }, aria: { expanded: "false"} ) do %> <i class="fa-solid fa-lg fa-ellipsis"></i>
-																		<% end %>
-																			<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-																				<% if current_user.id != twt.user_id %>
-																					<li> <a class="dropdown-item" href="#">Unfollow author</a> </li>
-																					<% end %>
-																						<li>
-																							<% if current_user.id == twt.user_id %>
-																								<%= link_to twt, method: :delete, data: {turbo_method: :delete,
-                                                turbo_confirm: 'Are you sure?' }, class: "dropdown-item"  do %> Delete
-																									<% end %>
-																										<% end %>
-																						</li>
-																			</ul>
-																			<% end %>
-															</div>
-														</div>
-											</div>
 
-										</div>
-									</div>
-						</div> <!-- row g-0 -->
-						<div class="row  mt-2">
-							<div class="col-3 text-center">
-								<%= link_to tweet_path(twt), class: "p-2", style: "color:#858585" do %> <i class="fa fa-solid fa-xl fa-comment"></i>
-									<% end %>
-							</div>
-							<div class="col-3 text-center" data-bs-toggle="modal" data-bs-target="#retweetmodal-<%=twt.id%>">
-								<%= link_to "javascript:;", class: "p-2 #{'retweet-color' if user_signed_in? && current_user.tweet.find_by(retweet_tweet_id: tweet.id) }", style: "color:#858585" do %> <i class="fa-solid fa-xl fa-retweet"></i>
-									<% end %>
-							</div>
-							<div class="col-3 text-center">
-								<% if user_signed_in? %>
-									<%= link_to tweet_path(twt), like: tweet.like.find_by(user_id: current_user.id).nil? ? -1 : tweet.like.find_by(user_id: current_user.id).id, tweet: tweet.id, user: current_user.id, class: "like_tweet p-2  #{'text-danger' if current_user.like.find_by(tweet_id: tweet.id) }", style: "color:#858585" do %> <i class="fa-solid fa-xl fa-heart"></i>
-										<% end %>
-											<% else %>
-												<%= link_to tweet_path(twt), tweet: twt.id, user: "-1", class: "like_tweet p-2", style: "color:#858585" do %> <i class="fa-solid fa-xl fa-heart"></i>
-													<% end %>
-														<% end %>
-							</div>
-							<div class="col-3 text-center" style="color:#858585"> <i class="fa-solid fa-share-nodes fa-xl"></i> </div>
-						</div>
-					</div>
-					<p class="border-top border-bottom pt-2 pb-2" style="margin-bottom:30px"> <b class="retweets"><%=tweet.retweet.count%> </b> Retweets, <b class="hearts-<%=tweet.id%>"><%=tweet.like.count%> </b> Likes </p>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <li>
+                                <%= simple_form_for(Tweet.new) do |f|%>								
+                                    <%= f.hidden_field :tweet, hidden: true, wrapper: false, value: "~" %>
+                                    <%= f.hidden_field :retweet_tweet_id, hidden: true, wrapper: false, value: tweet.id  %>
+                                    <%= f.button :submit,"Retweet", class: "dropdown-item"  %>
+                                <% end %>
+                            </li>
+                            <li>
+								<%= link_to "Quote retweet", retweet_tweet_path(id: tweet.id), class: "dropdown-item" %>
+                            </li>
+                        </ul>
+                        </div>
+
+                        </div>
+                        <div class="col-3 text-center">
+                        <% if user_signed_in? %>
+							<%= link_to tweet_path(tweet),likes_count: tweet.like.count, like: tweet.like.find_by(user_id: current_user.id).nil? ? -1 : tweet.like.find_by(user_id: current_user.id).id, tweet: tweet.id, user: current_user.id, class: "like_tweet p-2  #{'text-danger' if current_user.like.find_by(tweet_id: tweet.id) }", style: "color:#858585" do %> 
+                            <i class="fa-solid fa-xl fa-heart"></i>
+							<% end %>
+                        <% else %>
+							<%= link_to new_user_session_path, style: "color:#858585" do %> 
+                            <i class="fa-solid fa-xl fa-heart"></i>
+							<% end %>
+                        <% end %>
+                    </div>
+                <div class="col-3 text-center" style="color:#858585"> 
+            <i class="fa-solid fa-share-nodes fa-xl"></i> 
+        </div>
+    </div>
+</div>
+<p class="border-top border-bottom pt-2 pb-2" style="margin-bottom:30px"> 
+<b class="retweets">
+<%=tweet.retweet.count%> 
+</b> Retweets, 
+<b>
+<%= link_to tweet_likes_path(tweet), class: "hearts-#{tweet.id} text-decoration-none", style: "color:CornflowerBlue;" do%>
+    <%=pluralize(tweet.like.count, 'Like')%>
+<% end %>
+</b>
+</p>
 

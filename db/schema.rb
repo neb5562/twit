@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_16_124900) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_21_075756) do
   create_table "followers", force: :cascade do |t|
     t.integer "follow"
     t.integer "user_id"
@@ -40,6 +40,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_16_124900) do
     t.datetime "updated_at", null: false
     t.integer "user_id"
     t.integer "retweet_tweet_id"
+    t.boolean "deleted", default: false
   end
 
   create_table "users", force: :cascade do |t|

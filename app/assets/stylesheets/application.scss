@@ -15,3 +15,5 @@
  */
 
  @import 'bootstrap';
+
+ .main-tweet:not(.child-tweet):hover {cursor: pointer; }
