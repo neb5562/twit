@@ -2,34 +2,7 @@
 
 <div class="row">
 
-<div class="col-<%=@tweet.child == nil ? '8' : '10' %>">
-          <% if @tweet.child != nil %> 
-          <div class="float-start">
-              <img style="max-width: 30px;margin-right: 10px;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh2luCjtXnp2tzGjmlQyveWqphByb_Vi08ngH6JTdjcGY0ePuCb6MqE1ac5zV-0dPvb5g&usqp=CAU" class="rounded img-fluid rounded-start" alt="...">
-            </div>
-            <% end %> 
-            <p class="float-start">
-            <%= @tweet.user.name%>&nbsp; <%= link_to "@" + @tweet.user.username , show_user_profile_path("@" << @tweet.user.username) , class: "h8 card-title text-decoration-none text-secondary"%> · <small class="text-muted"><%= link_to tweet_path(@tweet), class: "p-1 text-decoration-none", style: "color:#858585;font-size: 11px;" do %>
-            <%= time_ago_in_words(@tweet.updated_at).to_s + " ago" %>
-            <% end %> 
-            </small>
-            </p>
-            <p style="display: inline-block; width:100%;"><%= h(@tweet.tweet == '~' ? @tweet.child.tweet : @tweet.tweet).gsub(/(#)\S+/, '
-						
-									<a href="hashtag/\0">\0</a>').gsub(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/, '
-									<a target="_blank" href="\0">\0</a>').gsub(/(@)\S+/, '
-						
-									<a href="profile/\0">\0</a>').html_safe %> </p>
-          </div>
-          <div class="col-2">
-            <div class="dropdown"><% if user_signed_in? %><%= link_to("javascript:;", class: "dropdown-toggle btn btnr float-end", style: "color:#cdcdcd;", id: "dropdownMenuLink", data: { 'bs-toggle': "dropdown" }, aria: { expanded: "false"} ) do %> <i class="fa-solid fa-lg fa-ellipsis"></i><% end %> <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink"><% if current_user.id != @tweet.user_id %> <li>
-                  <a class="dropdown-item" href="#">Unfollow author</a>
-                </li><% end %> <li><% if current_user.id == @tweet.user_id %><%= link_to @tweet, method: :delete, data: {turbo_method: :delete,
-                                                turbo_confirm: 'Are you sure?' }, class: "dropdown-item"  do %> Delete <% end %><% end %> </li>
-              </ul><% end %> </div>
-  </div>
-
-
+<%= render "tweets/tweet", tweet: @tweet %>
 
 <div class="card mb-5">
  <div class="card-header">

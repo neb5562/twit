@@ -4,11 +4,10 @@
 
 <div id="likes">
   <% @likes.each do |like| %>
-    <%= render like %>
     <p>
-      <%= link_to "Show this like", like %>
+      <%= like.user.username %>
     </p>
   <% end %>
 </div>
 
-<%= link_to "New like", new_like_path %>
+

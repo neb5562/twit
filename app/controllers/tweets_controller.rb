@@ -1,7 +1,7 @@
 class TweetsController < ApplicationController
   before_action :set_tweet, only: %i[ show edit destroy ]
   before_action :authenticate_user!, except: [:index, :show]
-
+  after_action :add_notifications_to_db, only: [:create]
   # GET /tweets or /tweets.json
   def index
     #@tweets = Tweet.all.order("created_at DESC") #limit(5).
@@ -12,7 +12,9 @@ class TweetsController < ApplicationController
 
   # GET /tweets/1 or /tweets/1.json
   def show
-    
+    if params[:seen] != nil && current_user.id != nil
+      Notification.where(seen: false).where(id: params[:seen]).where(user_id: current_user.id).update(:seen => true)
+    end
   end
 
   # GET /tweets/new
@@ -58,23 +60,41 @@ class TweetsController < ApplicationController
 
   # DELETE /tweets/1 or /tweets/1.json
   def destroy
-    if @tweet.user_id == current_user.id
-      #@tweet.destroy
-      @tweet.deleted = true
-      @tweet.save
-      respond_to do |format|
+    respond_to do |format|
+      if @tweet.user_id == current_user.id
+        @tweet.destroy
         format.html { redirect_to tweets_url, notice: "Tweet was successfully destroyed." }
         format.json { head :no_content }
-      end
-    else
-      respond_to do |format|
+      else
         format.html { redirect_to tweets_url, alert: "No permission" }
         format.json { head :no_content }
       end
     end
-
   end
   private
+    def add_notifications_to_db
+      followers = Follower.where(user_id: current_user.id)
+      
+      notifications = []
+      last_tweet_from_user = Tweet.where(user_id:current_user.id).last
+      if followers.blank? == false
+        # send notifications to followers
+        followers.each do |f|
+          notifications.push({ seen: false, notification_type: 1, user_id: f.follow, from: current_user.id, tweet_id: last_tweet_from_user.id })
+        end
+      end
+      if last_tweet_from_user.retweet_tweet_id != nil
+        notifications.push({ seen: false, notification_type: 2, user_id: Tweet.find_by(id: last_tweet_from_user.retweet_tweet_id).user_id, from: current_user.id, tweet_id: last_tweet_from_user.id })
+      end
+      profile_tags = last_tweet_from_user.tweet.scan(/@\S+/).map{ |i| i[1..-1]}
+      if profile_tags.empty? == false
+      tagged_users = User.where(username: profile_tags)
+      tagged_users.each do |usr|
+          notifications.push({ seen: false, notification_type: 4, user_id: usr.id, from: current_user.id, tweet_id: last_tweet_from_user.id })
+        end
+      end
+      Notification.insert_all(notifications)
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_tweet
       @tweet = Tweet.find(params[:id])
