@@ -4,7 +4,7 @@
             <div class="card-body">
                 <div class="row">   
                     <div class="col-1" style="padding-left:0px!important;"> 
-                        <img style="max-width:60px;" src="https://ui-avatars.com/api/?background=random&amp;length=3&amp;name=<%=tweet.user.username[0,3]%>" class="rounded img-fluid rounded-start" alt="..."> 
+                        <img style="" src="https://ui-avatars.com/api/?background=random&amp;length=3&amp;name=<%=tweet.user.username[0,3]%>" class="rounded img-fluid rounded-start" alt="..."> 
                     </div>
                         <div class="col-11">
                             <div class="dropdown float-end">
@@ -36,7 +36,7 @@
                             </p>
                             <p style="display: inline-block; width:100%;">
                             <% if tweet.tweet != '~' %>
-                             <%= h(tweet.tweet).gsub(/(#)\S+/, '<a href="hashtag/\0">\0</a>').gsub(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/, '<a target="_blank" href="\0">\0</a>').gsub(/(@)\S+/, '<a href="profile/\0">\0</a>').html_safe %>
+                             <%= h(tweet.tweet).gsub(/(#)\S+/, '<a href="hashtag/\0">\0</a>').gsub(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/, '<a target="_blank" href="\0">\0</a>').gsub(/(@)\S+/, '<a href="users/\0">\0</a>').html_safe %>
                             <% end %>
                             </p>
 <% if tweet.child != nil %>
@@ -52,7 +52,9 @@
                 </div>
                 <p class="float-start">
                 <%=tweet.child.user.name%>&nbsp;
-                <a class="h8 card-title text-decoration-none text-secondary" href="/users/@neb5562">@<%=tweet.child.user.username%></a>
+                <%= link_to show_user_profile_path('@' << tweet.child.user.username), class: "h8 card-title text-decoration-none text-secondary" do %>
+                @<%=tweet.child.user.username%>
+                <% end %>
                 · <small class="text-muted">
                 <%= link_to tweet_path(tweet.child), style: "color:#858585;font-size: 11px;", class: "text-decoration-none" do%>
                  <%= time_ago_in_words(tweet.child.updated_at).to_s + " ago" %>
@@ -60,7 +62,7 @@
                 </small> 
                 </p>
                 <p style="display: inline-block; width:100%;">
-                    <%= h(tweet.child.tweet).gsub(/(#)\S+/, '<a href="hashtag/\0">\0</a>').gsub(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/, '<a target="_blank" href="\0">\0</a>').gsub(/(@)\S+/, '<a href="profile/\0">\0</a>').html_safe %>
+                    <%= h(tweet.child.tweet).gsub(/(#)\S+/, '<a href="hashtag/\0">\0</a>').gsub(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/, '<a target="_blank" href="\0">\0</a>').gsub(/(@)\S+/, '<a href="users/\0">\0</a>').html_safe %>
                 </p>
                 </div>
                 <div class="col-2">

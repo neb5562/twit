@@ -1,17 +1,17 @@
-<div id="<%= dom_id notification %>">
-  <p>
-    <strong>Seen:</strong>
-    <%= notification.seen %>
-  </p>
-
-  <p>
-    <strong>Type:</strong>
-    <%= notification.type %>
-  </p>
-
-  <p>
-    <strong>User:</strong>
-    <%= notification.user_id %>
-  </p>
-
-</div>
+<% if notification.notification_type == 1 %>
+<li>
+  <%=link_to "#{notification.sender.username} has new tweet" , tweet_path(notification.tweet_id, :seen => notification.id ), class: "dropdown-item #{(notification.seen != true ? 'text-primary' : 'text-secondary')}" %>
+</li>
+<% elsif notification.notification_type == 2 %>
+<li>
+  <%=link_to "#{notification.sender.username} Retweeted Your tweet", tweet_path(notification.tweet_id, :seen => notification.id ), class: "dropdown-item #{(notification.seen != true ? 'text-primary' : 'text-secondary')}" %>
+</li>
+<% elsif notification.notification_type == 3 %>
+<li>
+  <%=link_to "#{notification.sender.username} Liked Your tweet", tweet_path(notification.tweet_id, :seen => notification.id ), class: "dropdown-item #{(notification.seen != true ? 'text-primary' : 'text-secondary')}" %>
+</li>
+<% elsif notification.notification_type == 4 %>
+<li>
+  <%=link_to "#{notification.sender.username} Tagged you in tweet", tweet_path(notification.tweet_id, :seen => notification.id ), class: "dropdown-item #{(notification.seen != true ? 'text-primary' : 'text-secondary')}" %>
+</li>
+<% end %>

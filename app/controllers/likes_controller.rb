@@ -1,9 +1,10 @@
 class LikesController < ApplicationController
   before_action :set_like, only: %i[ show edit update destroy ]
+  after_action :add_like_notifications_to_db, only: %i[ create ]
 
   # GET /likes or /likes.json
   def index
-    @likes = Like.all
+    @likes = Like.where(tweet_id: params[:tweet_id]).all.order("created_at DESC")
   end
 
   # GET /likes/1 or /likes/1.json
@@ -22,11 +23,11 @@ class LikesController < ApplicationController
   # POST /likes or /likes.json
   def create
     @like = Like.new(like_params)
-
+    @like.save
     respond_to do |format|
       if @like.save
-        format.html { redirect_to like_url(@like), notice: "Like was successfully created." }
-        format.json { render :show, status: :created, location: @like }
+        format.html {  }
+        format.json {  }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @like.errors, status: :unprocessable_entity }
@@ -38,7 +39,7 @@ class LikesController < ApplicationController
   def update
     respond_to do |format|
       if @like.update(like_params)
-        format.html { redirect_to like_url(@like), notice: "Like was successfully updated." }
+        format.html { render :show, notice: "Like was successfully updated." }
         format.json { render :show, status: :ok, location: @like }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -66,5 +67,12 @@ class LikesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def like_params
       params.require(:like).permit(:tweet_id, :user_id)
+    end
+    def add_like_notifications_to_db     
+      notifications = []
+      last_like_from_user = Like.where(user_id:current_user.id).last
+      tweet = Tweet.find_by(id: last_like_from_user.tweet_id)
+      notifications.push({ seen: false, notification_type: 3, user_id: tweet.user.id, from: current_user.id, tweet_id: tweet.id })
+      Notification.insert_all(notifications)
     end
 end

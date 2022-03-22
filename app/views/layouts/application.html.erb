@@ -145,25 +145,18 @@
               <div class="dropdown float-start p-2">
                 <a class="dropdown-toggle" type="button" style="position:relative;" aria-expanded="true" data-bs-toggle = "dropdown">
                   <i class="fa-solid fa-lg fa-bell"></i>
-                  <% if current_user.notification.count > 0 %>
-                    <div class="notification-dot"><%=current_user.notification.count.to_s[0,1] %></div>
+                  <% if current_user.notification.where(seen: false).count > 0 %>
+                    <div class="notification-dot"><%=current_user.notification.where(seen: false).count.to_s[0,1] %></div>
                   <% end %>
                 </a>
                 
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 <% if current_user.notification.count > 0 %>
 
-                  <% current_user.notification.each do | n | %>
-                    <% if n.notification_type == 1 %>
-                      <li>
-                      <%=link_to "#{n.sender.username} Tweeted \"#{Tweet.find_by(id: n.tweet_id).tweet[0,10]}\"", tweet_path(n.tweet_id), class: "text-dark dropdown-item" %>
-                      </li>
-                    <% elsif %>
-                    1
-                    <% end %>
-                  
+                  <% @notifications.each do | notification | %>
+                    <%= render "notifications/notification", notification: notification %>
                   <% end %>
-
+                <li class="text-center"><a href="#" class="text-primary">Mark all as read</a></li>
 
                 <% else %>
                   <li class="text-dark dropdown-item">No new notifications</li>

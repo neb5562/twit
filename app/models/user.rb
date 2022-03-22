@@ -9,4 +9,5 @@ class User < ApplicationRecord
   has_many :like
   has_many :notification, dependent: :delete_all
   validates_presence_of :name, :email, :username
+  before_validation { self.username = self.username.downcase }
 end
