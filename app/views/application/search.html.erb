@@ -1,0 +1,14 @@
+<div class="text-center">
+    <div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
+    <%= link_to 'Top', search_url(where: 'top', query: params[:query]), class: "btn btn-light #{'text-secondary' if params[:where] == 'top'}" %>
+    <%= link_to 'Latest', search_url(where: 'latest', query: params[:query]), class: "btn btn-light #{'text-secondary' if params[:where] == 'latest'}" %>
+    <%= link_to 'People', search_url(where: 'people', query: params[:query]), class: "btn btn-light #{'text-secondary' if params[:where] == 'people'}" %>
+    </div>
+</div>
+<% @tweets.each do | tweet | %>
+    <%= render "tweets/tweet", tweet: tweet %>
+    <% end %>
+
+<div class="digg_pagination d-flex justify-content-center mb-5">
+    <%= will_paginate @tweets %>
+</div>

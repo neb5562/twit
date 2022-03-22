@@ -5,7 +5,7 @@ class TweetsController < ApplicationController
   # GET /tweets or /tweets.json
   def index
     #@tweets = Tweet.all.order("created_at DESC") #limit(5).
-    @tweets = Tweet.where(:deleted => false).paginate(page: params[:page]).order("created_at DESC")
+    @tweets = Tweet.includes(:like,:retweet).paginate(page: params[:page]).order("created_at DESC")
     @tweet = Tweet.new
     @user = current_user
   end
@@ -13,7 +13,7 @@ class TweetsController < ApplicationController
   # GET /tweets/1 or /tweets/1.json
   def show
     if params[:seen] != nil && current_user.id != nil
-      Notification.where(seen: false).where(id: params[:seen]).where(user_id: current_user.id).update(:seen => true)
+      Notification.includes(:rec).where(seen: false).where(id: params[:seen]).where(user_id: current_user.id).update(:seen => true)
     end
   end
 

@@ -12,7 +12,7 @@ class UsersController < ApplicationController
   end
 
   def profile
-    @user = User.find_by(username: params[:name].to_s[1..-1])
+    @user = User.includes(:tweet,:follower,:like, :notification).find_by(username: params[:name].to_s[1..-1])
     @tweets = @user.tweet.paginate(page: params[:page]).order("created_at DESC")
   end
 

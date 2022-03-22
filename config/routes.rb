@@ -11,5 +11,5 @@ Rails.application.routes.draw do
   post "follow", to: "users#follow", as: "follow_user"
   delete "follow", to: "users#unfollow", as: "unfollow_user"
   get "retweet/:id", to: "tweets#retweet", as: "retweet_tweet"
-
+  get "search/:where", to: "application#search", as: "search"
 end
